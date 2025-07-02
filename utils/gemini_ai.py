@@ -35,3 +35,28 @@ def generate_cover_letter(resume_text, jd_text):
     except Exception as e:
         print(f"❌ Gemini API Error: {e}")
         return "❌ Sorry, Gemini couldn't generate the cover letter."
+def generate_tailored_resume(resume_text, jd_text):
+    prompt = f"""
+You are an expert resume editor. Your job is to tailor this resume to better match the job description, while keeping the same format, structure, and tone.
+
+- Do NOT change the section names, order, or overall layout.
+- Inject missing keywords naturally into relevant parts.
+- Rewrite only where necessary to align with the job description.
+- Make the resume feel personalized, not AI-generated.
+
+Original Resume:
+{resume_text}
+
+Job Description:
+{jd_text}
+
+Return the tailored resume in the same format as the original.
+"""
+
+    try:
+        model = genai.GenerativeModel("gemini-1.5-flash-latest")
+        response = model.generate_content(prompt)
+        return response.text.strip()
+    except Exception as e:
+        print(f"❌ Gemini API Error (Tailored Resume): {e}")
+        return "❌ Couldn't generate tailored resume."
